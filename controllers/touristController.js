@@ -1,52 +1,85 @@
-const TouristSpot = require("../models/touristModel");
 const path = require("path");
-
 // Add a new tourist spot
+const cloudinary = require("cloudinary").v2;
+const TouristSpot = require("../models/touristModel");
+const stream = require("stream");
+
 const addTouristSpot = async (req, res) => {
   try {
-    if (!req.files || Object.keys(req.files).length === 0) {
-      return res.status(400).send("No files were uploaded.");
+    if (!req.files || !req.files.image) {
+      return res.status(400).json({ msg: "Must contain an image" });
     }
 
-    const { name, province, district, country, category } = req.body;
-    const image = req.files.image;
+    const productImage = req.files.image;
 
-    // Set the upload path to public/uploads
-    const uploadPath = path.join(__dirname, "../public/uploads/", image.name);
+    // Check if the file is actually an image
+    if (!productImage.mimetype.startsWith("image")) {
+      return res.status(400).json({ msg: "Must contain an image" });
+    }
 
-    // Move the image file to the specified path
-    image.mv(uploadPath, (err) => {
-      if (err) {
-        return res.status(500).json({ msg: "Error saving file", error: err });
+    // Check for the size
+    const maxSize = 1024 * 1024; // 1MB
+    if (productImage.size > maxSize) {
+      return res
+        .status(400)
+        .json({ msg: "Image size should be less than 1MB" });
+    }
+
+    // Create a buffer stream from the image data
+    const bufferStream = new stream.PassThrough();
+    bufferStream.end(productImage.data); // Assuming productImage.data contains the image buffer
+
+    // Upload the image to Cloudinary
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        use_filename: true,
+        folder: "file-upload-02",
+      },
+      async (error, result) => {
+        if (error) {
+          return res
+            .status(500)
+            .json({ msg: "Error uploading image to Cloudinary", error });
+        }
+
+        // The secure URL is the path to the uploaded image
+        const imagePath = result.secure_url;
+
+        // Get additional data from the request body
+        const { name, province, district, country, category } = req.body;
+
+        // Save tourist spot info in the database
+        const newTouristSpot = new TouristSpot({
+          name,
+          location: {
+            province,
+            district,
+            country,
+          },
+          category,
+          image: imagePath, // Save the URL in the DB
+        });
+
+        try {
+          await newTouristSpot.save();
+          res.status(200).json({ msg: "Spot added" });
+        } catch (err) {
+          res
+            .status(500)
+            .json({ msg: "Error saving tourist spot", error: err });
+        }
       }
+    );
 
-      // Store the relative image path in the database
-      const imagePath = `/uploads/${image.name}`;
-
-      // Save tourist spot info in the database
-      const newTouristSpot = new TouristSpot({
-        name,
-        location: {
-          province: province,
-          district: district,
-          country: country,
-        },
-        category,
-        image: imagePath, // Save relative path in the DB
-      });
-
-      newTouristSpot
-        .save()
-        .then(() => res.status(200).json({ msg: "Spot added" }))
-        .catch((err) =>
-          res.status(500).json({ msg: "Error saving tourist spot", error: err })
-        );
-    });
+    // Pipe the buffer stream to Cloudinary's upload stream
+    bufferStream.pipe(uploadStream);
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Error adding tourist spot", error });
   }
 };
+
+module.exports = { addTouristSpot };
 
 // Get all tourist spots
 const getAllTouristSpots = async (req, res) => {
