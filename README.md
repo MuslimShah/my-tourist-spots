@@ -12,7 +12,7 @@ The Tourist API allows users to manage a collection of tourist spots in Pakistan
 ## API Endpoints
 
 ### 1. Add Tourist Spot
-- **POST** `/api/tourist`
+- **POST** `/api/tourist-spots`
 - **Description**: Adds a new tourist spot.
 - **Request Body**:
   ```json
@@ -28,7 +28,7 @@ The Tourist API allows users to manage a collection of tourist spots in Pakistan
 ## API Endpoints
 
 ### 1. Add Tourist Spot
-- **POST** `/api/tourist`
+- **POST** `/api/tourist-spots`
 - **Description**: Adds a new tourist spot.
 - **Response**:
   - **200**: Spot added successfully.
@@ -42,7 +42,7 @@ The Tourist API allows users to manage a collection of tourist spots in Pakistan
   - **500**: Error retrieving tourist spots.
 
 ### 3. Get Tourist Spot by ID
-- **GET** `/api/tourist/:id`
+- **GET** `/api/tourist-spots/:id`
 - **Description**: Retrieves a tourist spot by its ID.
 - **Response**:
   - **200**: Tourist spot found.
@@ -50,13 +50,22 @@ The Tourist API allows users to manage a collection of tourist spots in Pakistan
   - **500**: Error retrieving the tourist spot.
 
 ### 4. Search Tourist Spots
-- **GET** `/api/tourist/search`
+- **GET** `/api/spot/search`
 - **Description**: Searches for tourist spots based on query parameters.
 - **Query Parameters**:
   - `query`: Search term for name, province, or category.
 - **Response**:
   - **200**: List of matching tourist spots.
   - **500**: Error searching tourist spots.
+
+### 5. Delete Tourist Spot
+- **DELETE** `/api/tourist-spots/:id`
+- **Description**: Deletes a tourist spot by its ID.
+- **Response**:
+  - **200**: Tourist spot deleted successfully.
+  - **404**: Tourist spot not found.
+  - **500**: Error deleting the tourist spot.
+
 
 ## File Upload
 The API uses Cloudinary to store images. Images must be in JPEG, PNG, or GIF format and should not exceed 1MB in size.
