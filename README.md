@@ -37,10 +37,40 @@ The Tourist API allows users to manage a collection of tourist spots in Pakistan
 
 ### 2. Get All Tourist Spots
 - **GET** `/api/tourist`
-- **Description**: Retrieves all tourist spots.
+- **Description**: Retrieves all tourist spots with optional pagination.
+- **Query Parameters**:
+  - `page`: (optional) The page number to retrieve. Default is `1`.
+  - `limit`: (optional) The number of spots to return per page. Default is `10`.
+
 - **Response**:
-  - **200**: List of tourist spots.
+  - **200**: 
+    - Description: List of tourist spots.
+    - Body:
+      ```json
+      {
+        "totalSpots": number,          // Total number of tourist spots
+        "totalPages": number,          // Total number of pages
+        "currentPage": number,         // Current page number
+        "spots": [                     // Array of tourist spots
+          {
+            "location": {
+              "province": "string",
+              "district": "string",
+              "country": "string"
+            },
+            "_id": "string",
+            "name": "string",
+            "image": "string",
+            "category": "string",
+            "createdAt": "string",
+            "updatedAt": "string"
+          }
+        ]
+      }
+      ```
+  - **404**: No spots added yet.
   - **500**: Error retrieving tourist spots.
+
 
 ### 3. Get Tourist Spot by ID
 - **GET** `/api/tourist-spots/:id`
