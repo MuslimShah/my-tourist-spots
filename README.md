@@ -80,3 +80,7 @@ The API responds with appropriate HTTP status codes and error messages for inval
    ```bash
    npm install express mongoose express-fileupload cloudinary
 
+
+## API Documentation
+For detailed API documentation, please refer to the [Postman Documentation](https://documenter.getpostman.com/view/25664365/2sAXqs8hnf).
+
