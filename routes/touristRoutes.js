@@ -11,6 +11,9 @@ router.get("/tourist-spots", touristController.getAllTouristSpots);
 // Route to get a specific tourist spot by ID (GET)
 router.get("/tourist-spots/:id", touristController.getTouristSpotById);
 
+//delete a spot
+router.delete("/tourist-spots/:id", touristController.deleteTouristSpot);
+
 // Route to search for tourist spots (GET)
 router.get("/spot/search", touristController.searchTouristSpots);
 

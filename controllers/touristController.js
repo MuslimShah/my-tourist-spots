@@ -129,8 +129,23 @@ const searchTouristSpots = async (req, res) => {
   }
 };
 
+const deleteTouristSpot = async (req, res) => {
+  try {
+    const spotId = req.params.id;
+    const del = await TouristSpot.findOneAndDelete({ _id: spotId });
+    if (!del) {
+      return res.status(404).json({ msg: "no spot found" });
+    }
+
+    res.status(200).json({ msg: "spot deleted" });
+  } catch (error) {
+    res.status(500).json({ msg: "Error deleting tourist spots" });
+  }
+};
+
 // Export all functions at once
 module.exports = {
+  deleteTouristSpot,
   addTouristSpot,
   getAllTouristSpots,
   getTouristSpotById,
