@@ -15,7 +15,7 @@ The Tourist API allows users to manage a collection of tourist spots in Pakistan
 ### 1. Add Tourist Spot
 - **POST** `/api/tourist-spots`
 - **Description**: Adds a new tourist spot.
-- **Request Body**:
+- - **Request Body**:
   ```json
   {
       "name": "Fairy Meadows",
@@ -25,12 +25,6 @@ The Tourist API allows users to manage a collection of tourist spots in Pakistan
       "category": "mountain",
       "image": "<image file>" // uploaded file
   }
-
-## API Endpoints
-
-### 1. Add Tourist Spot
-- **POST** `/api/tourist-spots`
-- **Description**: Adds a new tourist spot.
 - **Response**:
   - **200**: Spot added successfully.
   - **400**: Bad request (e.g., missing fields, invalid file).
