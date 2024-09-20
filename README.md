@@ -36,7 +36,7 @@ The Tourist API allows users to manage a collection of tourist spots in Pakistan
   - **400**: Bad request (e.g., missing fields, invalid file).
 
 ### 2. Get All Tourist Spots
-- **GET** `/api/tourist`
+- **GET** `/api/tourist-spots`
 - **Description**: Retrieves all tourist spots with optional pagination.
 - **Query Parameters**:
   - `page`: (optional) The page number to retrieve. Default is `1`.
