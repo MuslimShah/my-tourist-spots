@@ -8,6 +8,7 @@ The Tourist API allows users to manage a collection of tourist spots in Pakistan
 - **Retrieve All Tourist Spots**: Get a list of all tourist spots available in the database.
 - **Get Tourist Spot by ID**: Retrieve detailed information about a specific tourist spot using its ID.
 - **Search Tourist Spots**: Search for tourist spots by name, province, or category.
+- - **Delete Tourist Spots**: Delete  tourist spots by id.
 
 ## API Endpoints
 
