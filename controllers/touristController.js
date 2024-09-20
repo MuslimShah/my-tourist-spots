@@ -84,8 +84,28 @@ module.exports = { addTouristSpot };
 // Get all tourist spots
 const getAllTouristSpots = async (req, res) => {
   try {
-    const spots = await TouristSpot.find();
-    res.status(200).json(spots);
+    const page = parseInt(req.query.page) || 1; // Default to page 1
+    const limit = parseInt(req.query.limit) || 10; // Default limit to 10
+
+    // Calculate the number of documents to skip
+    const skip = (page - 1) * limit;
+
+    // Fetch the tourist spots with pagination
+    const spots = await TouristSpot.find().skip(skip).limit(limit);
+
+    if (spots.length === 0) {
+      return res.status(404).json({ msg: "No spots added yet" });
+    }
+
+    // Get total count of spots for pagination info
+    const totalSpots = await TouristSpot.countDocuments();
+
+    res.status(200).json({
+      totalSpots,
+      totalPages: Math.ceil(totalSpots / limit),
+      currentPage: page,
+      spots,
+    });
   } catch (error) {
     res.status(500).json({ msg: "Error retrieving tourist spots", error });
   }
